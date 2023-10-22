@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -14,6 +15,7 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  <!-- <base href="https://lansoyyy.github.io/rfid_scanner/"> -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -27,7 +29,7 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>valley_desktop</title>
   <link rel="manifest" href="manifest.json">
@@ -39,21 +41,51 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
+
 <body>
   <script>
-    window.addEventListener('load', function(ev) {
+    window.addEventListener('load', function (ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
             appRunner.runApp();
           });
         }
       });
     });
   </script>
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-core.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
+
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+
+      authDomain: "valley-9b203.firebaseapp.com",
+
+
+
+
+      apiKey: 'AIzaSyBYw1II0TSmA-HXeU1NJI1WF2xzyPFIhdQ',
+      appId: '1:354930278705:web:4353cd8bf8ccee79173010',
+      messagingSenderId: '354930278705',
+      projectId: 'valley-9b203',
+      storageBucket: 'valley-9b203.appspot.com',
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
 </body>
+
 </html>
