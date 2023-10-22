@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ndef/record.dart';
 import 'package:valley_desktop/screens/home_screen.dart';
 import 'package:valley_desktop/widgets/button_widget.dart';
@@ -24,6 +25,7 @@ class RegisteringScreen extends StatefulWidget {
 }
 
 class _RegisteringScreenState extends State<RegisteringScreen> {
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,43 +56,53 @@ class _RegisteringScreenState extends State<RegisteringScreen> {
                 ButtonWidget(
                   label: 'Register',
                   onPressed: () async {
-                    var tag = await FlutterNfcKit.poll(
-                        timeout: const Duration(seconds: 10));
-                    var availability = await FlutterNfcKit.nfcAvailability;
+                    box.write('name', widget.name);
+                    box.write('id', widget.idnumber);
+                    box.write('course', widget.course);
+                    box.write('section', widget.section);
 
-                    if (tag.ndefWritable == true) {
-                      if (availability != NFCAvailability.available) {
-                        showToast('No NFC detected');
-                      } else {
-                        try {
-                          final customRecord = NDEFRawRecord(
-                            "student",
-                            "${widget.name},${widget.idnumber},${widget.course},${widget.section}",
-                            "student_data",
-                            TypeNameFormat.unknown,
-                          );
+                    showToast('Student registered succesfully!');
 
-                          await FlutterNfcKit.writeNDEFRawRecords(
-                              [customRecord]).then((value) {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => const HomeScreen()))
-                                .then(
-                              (value) {
-                                showToast('Student registered succesfully!');
-                              },
-                            );
-                          });
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
 
-                          // Handle success
-                        } catch (e) {
-                          showToast(e);
-                          // Handle error
-                        }
-                      }
-                    } else {
-                      showToast('NFC Tag not writable');
-                    }
+                    // var tag = await FlutterNfcKit.poll(
+                    //     timeout: const Duration(seconds: 10));
+                    // var availability = await FlutterNfcKit.nfcAvailability;
+
+                    // if (tag.ndefWritable == true) {
+                    //   if (availability != NFCAvailability.available) {
+                    //     showToast('No NFC detected');
+                    //   } else {
+                    //     try {
+                    //       final customRecord = NDEFRawRecord(
+                    //         "student",
+                    //         "${widget.name},${widget.idnumber},${widget.course},${widget.section}",
+                    //         "student_data",
+                    //         TypeNameFormat.unknown,
+                    //       );
+
+                    //       await FlutterNfcKit.writeNDEFRawRecords(
+                    //           [customRecord]).then((value) {
+                    //         Navigator.of(context)
+                    //             .pushReplacement(MaterialPageRoute(
+                    //                 builder: (context) => const HomeScreen()))
+                    //             .then(
+                    //           (value) {
+                    //             showToast('Student registered succesfully!');
+                    //           },
+                    //         );
+                    //       });
+
+                    //       // Handle success
+                    //     } catch (e) {
+                    //       showToast(e);
+                    //       // Handle error
+                    //     }
+                    //   }
+                    // } else {
+                    //   showToast('NFC Tag not writable');
+                    // }
                   },
                 ),
               ],

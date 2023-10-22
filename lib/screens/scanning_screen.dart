@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:valley_desktop/services/add_attendance.dart';
 import 'package:valley_desktop/widgets/text_widget.dart';
 
@@ -25,10 +26,7 @@ class ScanningScreen extends StatefulWidget {
 }
 
 class _ScanningScreenState extends State<ScanningScreen> {
-  String name = '';
-  String idnumber = '';
-  String course = '';
-  String section = '';
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,51 +57,63 @@ class _ScanningScreenState extends State<ScanningScreen> {
                 ButtonWidget(
                   label: 'Continue',
                   onPressed: () async {
-                    var tag = await FlutterNfcKit.poll(
-                        timeout: const Duration(seconds: 10));
-                    var availability = await FlutterNfcKit.nfcAvailability;
+                    addAttendance(
+                        box.read('name'),
+                        box.read('id'),
+                        box.read('section'),
+                        box.read('course'),
+                        widget.attendancetype,
+                        widget.labname,
+                        widget.computernumber);
+                    showToast('Attendance Recorded!');
 
-                    if (tag.ndefAvailable == true) {
-                      if (availability != NFCAvailability.available) {
-                        showToast('No NFC detected');
-                      } else {
-                        try {
-                          for (var record
-                              in await FlutterNfcKit.readNDEFRawRecords(
-                                  cached: false)) {
-                            setState(() {
-                              name = jsonEncode(record).split(',')[0];
-                              idnumber = jsonEncode(record).split(',')[1];
-                              course = jsonEncode(record).split(',')[2];
-                              section = jsonEncode(record).split(',')[3];
-                            });
-                          }
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
+                    // var tag = await FlutterNfcKit.poll(
+                    //     timeout: const Duration(seconds: 10));
+                    // var availability = await FlutterNfcKit.nfcAvailability;
 
-                          // Add Atttendance
-                          addAttendance(
-                              name,
-                              idnumber,
-                              section,
-                              course,
-                              widget.attendancetype,
-                              widget.labname,
-                              widget.computernumber);
+                    // if (tag.ndefAvailable == true) {
+                    //   if (availability != NFCAvailability.available) {
+                    //     showToast('No NFC detected');
+                    //   } else {
+                    //     try {
+                    //       for (var record
+                    //           in await FlutterNfcKit.readNDEFRawRecords(
+                    //               cached: false)) {
+                    //         setState(() {
+                    //           name = jsonEncode(record).split(',')[0];
+                    //           idnumber = jsonEncode(record).split(',')[1];
+                    //           course = jsonEncode(record).split(',')[2];
+                    //           section = jsonEncode(record).split(',')[3];
+                    //         });
+                    //       }
 
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()))
-                              .then(
-                            (value) {
-                              showToast('Attendance Recorded!');
-                            },
-                          );
-                        } catch (e) {
-                          showToast(e);
-                        }
-                      }
-                    } else {
-                      showToast('NFC Tag not available');
-                    }
+                    //       // Add Atttendance
+                    //       addAttendance(
+                    //           name,
+                    //           idnumber,
+                    //           section,
+                    //           course,
+                    //           widget.attendancetype,
+                    //           widget.labname,
+                    //           widget.computernumber);
+
+                    //       Navigator.of(context)
+                    //           .pushReplacement(MaterialPageRoute(
+                    //               builder: (context) => const HomeScreen()))
+                    //           .then(
+                    //         (value) {
+                    //           showToast('Attendance Recorded!');
+                    //         },
+                    //       );
+                    //     } catch (e) {
+                    //       showToast(e);
+                    //     }
+                    //   }
+                    // } else {
+                    //   showToast('NFC Tag not available');
+                    // }
                   },
                 ),
               ],
