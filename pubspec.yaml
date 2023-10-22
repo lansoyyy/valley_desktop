@@ -41,6 +41,7 @@ dependencies:
   flutter_nfc_kit:
   firebase_core:
   cloud_firestore:
+  get_storage:
 
 dev_dependencies:
   flutter_test:
