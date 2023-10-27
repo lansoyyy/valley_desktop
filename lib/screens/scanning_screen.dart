@@ -64,7 +64,8 @@ class _ScanningScreenState extends State<ScanningScreen> {
                         box.read('course'),
                         widget.attendancetype,
                         widget.labname,
-                        widget.computernumber);
+                        widget.computernumber,
+                        box.read('year'));
                     showToast('Attendance Recorded!');
 
                     Navigator.of(context).pushReplacement(MaterialPageRoute(

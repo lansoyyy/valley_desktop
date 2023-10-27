@@ -12,11 +12,13 @@ class RegisteringScreen extends StatefulWidget {
   String idnumber;
   String course;
   String section;
+  String year;
 
   RegisteringScreen(
       {super.key,
       required this.name,
       required this.idnumber,
+      required this.year,
       required this.course,
       required this.section});
 
@@ -60,6 +62,7 @@ class _RegisteringScreenState extends State<RegisteringScreen> {
                     box.write('id', widget.idnumber);
                     box.write('course', widget.course);
                     box.write('section', widget.section);
+                    box.write('year', widget.year);
 
                     showToast('Student registered succesfully!');
 
